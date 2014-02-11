@@ -4,8 +4,8 @@
 %table#movies
   %thead
     %tr
-      %th Movie Title
-      %th Rating
+      %th{:class => ("hilite" if @sort == "title")}= link_to 'Movie Title', movies_path(sort_param: 'title') #link_to (helper method - ActionView), first arg is a string that will appear as link, second is used to create a URI that will become the link target.
+      %th{:class => ("hilite" if @sort == "rating")}= link_to 'Ratings', movies_path(sort_param: 'rating')
       %th Release Date
       %th More Info
   %tbody
