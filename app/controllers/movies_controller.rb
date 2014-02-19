@@ -7,8 +7,16 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.order(params[:sort_param])
-    @sort = params[:sort_param]
+
+    if params.has_key? 'ratings'
+      @movies = Movie.find_all_by_rating(params[:ratings])
+    else
+      @movies = Movie.order(params[:sort_param]) # orders the movies by the current parameter
+    end
+
+    @sort = params[:sort_param] # This checks if it is ordered by movie title or Ratings to change the css to hilight the title
+    @all_ratings = Movie.pluck(:rating).uniq # Define the instance variable all_ratings and call the class method to get all the ratings.
+    
   end
 
   def new

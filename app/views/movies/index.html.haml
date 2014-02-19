@@ -1,11 +1,18 @@
 -#  This file is app/views/movies/index.html.haml
 %h1 All Movies
 
+= form_tag movies_path, :method => :get do
+  Include:
+  - @all_ratings.each do |rating|
+    = rating
+    = check_box_tag "ratings[]", rating
+  = submit_tag 'Refresh'
+
 %table#movies
   %thead
     %tr
-      %th{:class => ("hilite" if @sort == "title")}= link_to 'Movie Title', movies_path(sort_param: 'title') #link_to (helper method - ActionView), first arg is a string that will appear as link, second is used to create a URI that will become the link target.
-      %th{:class => ("hilite" if @sort == "rating")}= link_to 'Ratings', movies_path(sort_param: 'rating')
+      %th{:class => ("hilite" if @sort == "title")}= link_to 'Movie Title', movies_path(sort_param: 'title') #link_to (helper method - ActionView), first arg is a string that will appear as link, second is used to create a URI that will be what the first arg opens. 
+      %th{:class => ("hilite" if @sort == "rating")}= link_to 'Ratings', movies_path(sort_param: 'rating') # if 
       %th Release Date
       %th More Info
   %tbody
@@ -17,3 +24,4 @@
         %td= link_to "More about #{movie.title}", movie_path(movie)
 
 = link_to 'Add new movie', new_movie_path
+
