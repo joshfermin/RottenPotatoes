@@ -7,21 +7,21 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @all_ratings = Movie.pluck(:rating).uniq
+    @all_ratings = Movie.pluck(:rating).uniq # Go through all the different types of ratings in the database, make each type unique
 
     @selected_ratings = params[:ratings] if params.has_key? 'ratings' # Get ratings of checked boxes and store in @selected_ratings
-    @ordered_by = params[:order_by] if params.has_key? 'order_by'
+    @ordered_by = params[:order_by] if params.has_key? 'order_by' # order by param created by helper (has a key of either rating or movie title)
 
-    if params.has_key? 'ratings'
-      if @ordered_by
+    if params.has_key? 'ratings' # if the ratings key is present
+      if @ordered_by  # if the user is requesting for table to be ordered
         @movies = Movie.find_all_by_rating(@selected_ratings, :order => "#{@ordered_by} asc") # make it so that the movies can still be ordered even if filtered
-      else
+      else # if the user is not requesting an ordering...
         @movies = Movie.find_all_by_rating(@selected_ratings)
       end
-    elsif @ordered_by
-      @movies = Movie.all(:order => "#{@ordered_by} asc")
+    elsif @ordered_by # if the ratings key (filter by rating) is not present
+      @movies = Movie.all(:order => "#{@ordered_by} asc") # just sort everything by ascending
     else
-      @movies = Movie.all
+      @movies = Movie.all # else, just display all movies
   end
 
     #if params.has_key? 'ratings'
