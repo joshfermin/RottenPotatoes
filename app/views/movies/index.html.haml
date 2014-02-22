@@ -1,18 +1,28 @@
 -#  This file is app/views/movies/index.html.haml
 %h1 All Movies
-
-= form_tag movies_path, :method => :get do
+-#
+-#= form_tag movies_path, :method => :get do
+-#  Include:
+-#  - @all_ratings.each do |rating|
+-#    = rating
+-#    = check_box_tag "ratings[]", rating, @selected_ratings.include?(rating)
+-#  = submit_tag 'Refresh'
+= form_tag movies_path, method: :get do
   Include:
   - @all_ratings.each do |rating|
     = rating
-    = check_box_tag "ratings[]", rating
-  = submit_tag 'Refresh'
+    %input{type: 'checkbox', name: "ratings[]", value: "#{rating}", checked: was_checked?(rating)}
+  %input#ratings_submit{type: 'submit', value: 'Refresh'}
 
 %table#movies
   %thead
     %tr
-      %th{:class => ("hilite" if @sort == "title")}= link_to 'Movie Title', movies_path(sort_param: 'title') #link_to (helper method - ActionView), first arg is a string that will appear as link, second is used to create a URI that will be what the first arg opens. 
-      %th{:class => ("hilite" if @sort == "rating")}= link_to 'Ratings', movies_path(sort_param: 'rating') # if 
+      -#%th{:class => ("hilite" if @sort == "title")}= link_to 'Movie Title', movies_path(sort_param: 'title') #link_to (helper method - ActionView), first arg is a string that will appear as link, second is used to create a URI that will be what the first arg opens.
+      %th{:class => ("hilite" if @ordered_by == 'title')}
+        = link_to 'Movie Title', movies_path(create_order_params 'title')
+      -#%th{:class => ("hilite" if @sort == "rating")}= link_to 'Ratings', movies_path(sort_param: 'rating') # if
+      %th{:class => ("hilite" if @ordered_by == 'rating')}
+        = link_to 'Ratings', movies_path(create_order_params 'rating')
       %th Release Date
       %th More Info
   %tbody

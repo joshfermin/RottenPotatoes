@@ -7,16 +7,37 @@ class MoviesController < ApplicationController
   end
 
   def index
+    @all_ratings = Movie.pluck(:rating).uniq
+
+    @selected_ratings = params[:ratings] if params.has_key? 'ratings' # Get ratings of checked boxes and store in @selected_ratings
+    @ordered_by = params[:order_by] if params.has_key? 'order_by'
 
     if params.has_key? 'ratings'
-      @movies = Movie.find_all_by_rating(params[:ratings])
+      if @ordered_by
+        @movies = Movie.find_all_by_rating(@selected_ratings, :order => "#{@ordered_by} asc") # make it so that the movies can still be ordered even if filtered
+      else
+        @movies = Movie.find_all_by_rating(@selected_ratings)
+      end
+    elsif @ordered_by
+      @movies = Movie.all(:order => "#{@ordered_by} asc")
     else
-      @movies = Movie.order(params[:sort_param]) # orders the movies by the current parameter
-    end
+      @movies = Movie.all
+  end
 
-    @sort = params[:sort_param] # This checks if it is ordered by movie title or Ratings to change the css to hilight the title
-    @all_ratings = Movie.pluck(:rating).uniq # Define the instance variable all_ratings and call the class method to get all the ratings.
-    
+    #if params.has_key? 'ratings'
+    #  @movies = Movie.find_all_by_rating(params[:ratings])
+    #else
+    #  @movies = Movie.order(params[:sort_param]) # orders the movies by the current parameter
+    #end
+    #
+    #@sort = params[:sort_param] # This checks if it is ordered by movie title or Ratings to change the css to hilight the title
+    #@all_ratings = Movie.pluck(:rating).uniq # Go through all the different types of ratings in the database, make each type unique
+    #
+    #@selected_ratings = if params[:ratings].present? # if the param ratings is present
+    #                      params[:ratings] # assign @selected_ratings to params[:ratings]
+    #                    else
+    #                      [] # else, set selected ratings to empty array.
+    #                    end
   end
 
   def new
