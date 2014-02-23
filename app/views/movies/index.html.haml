@@ -11,19 +11,19 @@
   Include:
   - @all_ratings.each do |rating|
     = rating
-    %input{type: 'checkbox', name: "ratings[]", value: "#{rating}", checked: was_checked?(rating)}
-  %input#ratings_submit{type: 'submit', value: 'Refresh'}
+    = check_box_tag("ratings[]", "#{rating}", was_checked?(rating))
+  = submit_tag 'Refresh'
 
 %table#movies
   %thead
     %tr
-      -#%th{:class => ("hilite" if @sort == "title")}= link_to 'Movie Title', movies_path(sort_param: 'title') #link_to (helper method - ActionView), first arg is a string that will appear as link, second is used to create a URI that will be what the first arg opens.
+      -#link_to (helper method - ActionView), first arg is a string that will appear as link, second is used to create a URI that will be what the first arg opens.
       %th{:class => ("hilite" if @ordered_by == 'title')}
         = link_to 'Movie Title', movies_path(create_order_params 'title')
-      -#%th{:class => ("hilite" if @sort == "rating")}= link_to 'Ratings', movies_path(sort_param: 'rating') # if
       %th{:class => ("hilite" if @ordered_by == 'rating')}
         = link_to 'Ratings', movies_path(create_order_params 'rating')
-      %th Release Date
+      %th{:class => ("hilite" if @ordered_by == 'release_date')}
+        = link_to 'Release Date', movies_path(create_order_params 'release_date')
       %th More Info
   %tbody
     - @movies.each do |movie|

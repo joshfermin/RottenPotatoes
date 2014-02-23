@@ -13,7 +13,7 @@ module MoviesHelper
   end
 
   def create_order_params(column)
-    {order_by: column, ratings: @selected_ratings}  # set current ratings as @selected ratings, change order_by to column
+    {:order_by => column, :ratings => @selected_ratings}  # set current ratings as @selected ratings, change order_by to column
   end
 
 end
